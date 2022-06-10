@@ -1,12 +1,15 @@
-=begin
-  Площадь треугольника можно вычилсить, зная его основание (a) и высоту (h) по формуле: 1/2*a*h.
-  Программа должна запрашивать основание и высоту треугольника и возвращать его площадь.
-=end
+# frozen_string_literal: true
 
-puts "Enter a:"
+# Площадь треугольника можно вычилсить, зная его основание (a) и высоту (h) по формуле: 1/2*a*h.
+# Программа должна запрашивать основание и высоту треугольника и возвращать его площадь.
+
+puts 'Enter a:'
 a = gets.chomp.to_i
 
-puts "Enter h:"
+puts 'Enter h:'
 h = gets.chomp.to_i
 
-puts "Triangle square: #{(1.0/2)*a*h}"
+if a.positive? && h.positive?
+  square = (1.0 / 2.0) * a * h
+  puts "Triangle square: #{square}"
+end
