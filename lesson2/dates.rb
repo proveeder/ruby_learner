@@ -25,7 +25,9 @@ if input_valid
   res += day if months_and_days[month] >= day
 
   # if year is leap add 1 more day for february
-  res += 1 if (year % 4).zero? && res >= months_and_days[1] + months_and_days[2]
+  if (year % 4).zero? && (year % 100).zero? && (year % 400).zero? && res >= months_and_days[1] + months_and_days[2]
+    res += 1
+  end
 
   puts res
 else

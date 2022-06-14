@@ -16,17 +16,11 @@ loop do
 
   puts 'Enter price'
   price = gets.chomp.to_f
-  unless price.positive?
-    puts 'Invalid price'
-    next
-  end
+  puts 'Invalid price' && next unless price.positive?
 
   puts 'Enter quantity'
   quantity = gets.chomp.to_i
-  unless quantity.positive?
-    puts 'Invalid quantity'
-    next
-  end
+  puts 'Invalid quantity' && next unless quantity.positive?
 
   answers[product] = { price: price, quantity: quantity }
 end
