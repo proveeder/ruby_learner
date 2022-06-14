@@ -28,7 +28,7 @@ loop do
     next
   end
 
-  answers[product] = {price: price, quantity: quantity}
+  answers[product] = { price: price, quantity: quantity }
 end
 
 puts answers
