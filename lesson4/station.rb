@@ -13,12 +13,12 @@ class Station
 
   # Может принимать поезда (по одному за раз)
   def take_train(train)
-    trains_on_station.push(train) if train.instance_of?(Train)
+    trains_on_station.push(train) if train.class <= Train
   end
 
   # Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции).
   def send_train(train)
-    trains_on_station.delete(train) if train.instance_of?(Train)
+    trains_on_station.delete(train) if train.class <= Train
   end
 
   # Может показывать список поездов на станции по типу (см. ниже): кол-во грузовых, пассажирских

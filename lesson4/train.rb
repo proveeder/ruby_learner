@@ -50,6 +50,16 @@ class Train
     speed.zero? ? @wagons.delete(wagon) : puts("Can't remove wagons")
   end
 
+  # Может прицеплять вагоны (по одному вагону за операцию). Прицепка/отцепка вагонов может осуществляться только если
+  # поезд не движется.
+  # protected т.к. потом дополним валидацию на тип вагонов
+  def add_wagon(wagon)
+    # Wagon or any subclasses
+    if wagon.class <= Wagon
+      speed.zero? ? @wagons << wagon : puts("Can't add wagons")
+    end
+  end
+
   private
 
   def can_be_moved_to_this_station(station)
@@ -60,18 +70,6 @@ class Train
       false
     else
       false
-    end
-  end
-
-  protected
-
-  # Может прицеплять вагоны (по одному вагону за операцию). Прицепка/отцепка вагонов может осуществляться только если
-  # поезд не движется.
-  # protected т.к. потом дополним валидацию на тип вагонов
-  def add_wagon(wagon)
-    # Wagon or any subclasses
-    if wagon.class <= Wagon
-      speed.zero? ? @wagons << wagon : puts("Can't add wagons")
     end
   end
 end
