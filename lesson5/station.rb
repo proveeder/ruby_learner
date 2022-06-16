@@ -5,10 +5,13 @@ class Station
   # Может показывать список всех поездов на станции, находящиеся в текущий момент
   attr_reader :name, :trains_on_station
 
+  @@all_stations = []
+
   def initialize(station_name)
     # Имеет название, которое указывается при ее создании
     @name = station_name.instance_of?(String) ? station_name : nil
     @trains_on_station = []
+    @@all_stations << self
   end
 
   # Может принимать поезда (по одному за раз)
@@ -27,5 +30,11 @@ class Station
 
     puts "Trains of type #{train_type} on station: #{trains_on_station_by_type}.
           Amount: #{trains_on_station_by_type.length}"
+  end
+
+  # В классе Station (жд станция) создать метод класса all, который возвращает все станции (объекты),
+  # созданные на данный момент
+  def self.all
+    @@all_stations.each { |station| puts station.name }
   end
 end

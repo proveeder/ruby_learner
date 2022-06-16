@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'manufacturer'
+
 class Wagon
+  # Подключить модуль к классам Вагон и Поезд
+  include Manufacturer
+
   attr_reader :name
 
   def initialize(id, weight, price)

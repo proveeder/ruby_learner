@@ -1,21 +1,61 @@
 # frozen_string_literal: true
 
+# module My
+#
+#   def self.included(base)
+#     base.extend(ClassMethods)
+#   end
+#
+#   module ClassMethods
+#     def add_train_number_unless_exist
+#       unless self.instance_variables.include?(:@number)
+#         puts 'Enter train number'
+#         @number = gets.chomp
+#       end
+#     end
+#   end
+# end
+
+require_relative 'manufacturer'
+
 # Класс Train (Поезд):
 # Показывать предыдущую станцию, текущую, следующую, на основе маршрута
 class Train
+  # Подключить модуль к классам Вагон и Поезд
+  include Manufacturer
+
+  @@instances = []
+
   # Может показывать текущую скорость
   # Может показывать количество вагонов
   attr_reader :speed, :wagons, :type, :name
 
   # Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов, эти данные указываются при
   # создании экземпляра класса
-  def initialize(train_number, train_type)
-    @name = train_number.instance_of?(String) ? train_number : nil
+  def initialize(train_name, train_type, train_number = '')
+    @name = train_name.instance_of?(String) ? train_name : nil
     @type = %w[cargo passenger].include?(train_type) ? train_type : nil
     @wagons = []
     @speed = 0
     @route = nil
     @current_station = nil
+    @number = train_number if train_number != ''
+
+    @@instances << self
+  end
+
+  # Добавить к поезду атрибут Номер (произвольная строка), если его еще нет, который указыватеся при его создании
+  def add_train_number_unless_exist
+    unless instance_variables.include?(:@number)
+      puts 'Enter train number'
+      @number = gets.chomp
+    end
+  end
+
+  # В классе Train создать метод класса find, который принимает номер поезда (указанный при его создании) и возвращает
+  # объект поезда по номеру или nil, если поезд с таким номером не найден.
+  def self.find(train_name)
+    @@instances.select { |i| i.name == train_name }[0]
   end
 
   # Может тормозить (сбрасывать скорость до нуля)
@@ -63,13 +103,7 @@ class Train
   private
 
   def can_be_moved_to_this_station(station)
-    if !@route.nil? && station.instance_of?(Station) && @route.all_stations.include?(station)
-      true
-    elsif @current_station == station
-      puts 'Train is already on this station'
-      false
-    else
-      false
-    end
+    !@route.nil? && station.instance_of?(Station) && @route.all_stations.include?(station) &&
+      @current_station != station
   end
 end

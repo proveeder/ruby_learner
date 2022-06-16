@@ -44,7 +44,7 @@ class Main
     train = get_obj_by_type_and_name(Train, train_number)
     station = get_obj_by_type_and_name(Station, station_name)
 
-    r = train.specify_current_station(station)
+    train.specify_current_station(station)
   end
 
   def remove_wagon_from_train
