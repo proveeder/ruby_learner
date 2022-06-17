@@ -16,24 +16,16 @@ class Train
 
   # Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов, эти данные указываются при
   # создании экземпляра класса
-  def initialize(train_name, train_type, train_number = '')
+  def initialize(train_name, train_type, train_number)
     @name = train_name.instance_of?(String) ? train_name : nil
     @type = %w[cargo passenger].include?(train_type) ? train_type : nil
     @wagons = []
     @speed = 0
     @route = nil
     @current_station = nil
-    @number = train_number if train_number != ''
+    @number = train_number
 
     @@instances << self
-  end
-
-  # Добавить к поезду атрибут Номер (произвольная строка), если его еще нет, который указыватеся при его создании
-  def add_train_number_unless_exist
-    unless instance_variables.include?(:@number)
-      puts 'Enter train number'
-      @number = gets.chomp
-    end
   end
 
   # В классе Train создать метод класса find, который принимает номер поезда (указанный при его создании) и возвращает

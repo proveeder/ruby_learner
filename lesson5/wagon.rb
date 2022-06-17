@@ -4,7 +4,7 @@ require_relative 'manufacturer'
 
 class Wagon
   # Подключить модуль к классам Вагон и Поезд
-  include Manufacturer
+  prepend Manufacturer
 
   attr_reader :name
 
