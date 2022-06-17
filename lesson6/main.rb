@@ -97,22 +97,21 @@ class Main
   end
 
   def create_train
-    puts 'Enter train number'
-    train_number = gets.chomp
-
-    puts 'Enter train type or skip for base train'
-    train_type = gets.chomp
-
     train = nil
-    case train_type
-    when 'cargo'
-      train = CargoTrain.new(train_number, train_type)
-    when 'passenger'
-      train = PassengerTrain.new(train_number, train_type)
-    when ''
-      train = Train.new(train_number, train_type)
-    else
-      puts 'Invalid train'
+    attempts = 0
+    begin
+      puts 'Enter train name'
+      train_name = gets.chomp
+
+      puts 'Enter train number'
+      train_number = gets.chomp
+
+      train = Train.new(train_name, train_number)
+      puts 'Success' unless train.nil?
+    rescue RuntimeError => e
+      attempts += 1
+      puts e.inspect
+      attempts < 2 ? retry : puts("Failed after #{attempts} attempt(s)")
     end
 
     @objects << train unless train.nil?

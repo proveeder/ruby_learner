@@ -1,22 +1,7 @@
 # frozen_string_literal: true
 
-# module My
-#
-#   def self.included(base)
-#     base.extend(ClassMethods)
-#   end
-#
-#   module ClassMethods
-#     def add_train_number_unless_exist
-#       unless self.instance_variables.include?(:@number)
-#         puts 'Enter train number'
-#         @number = gets.chomp
-#       end
-#     end
-#   end
-# end
-
 require_relative 'manufacturer'
+require_relative 'validation'
 
 # Класс Train (Поезд):
 # Показывать предыдущую станцию, текущую, следующую, на основе маршрута
@@ -32,24 +17,22 @@ class Train
 
   # Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов, эти данные указываются при
   # создании экземпляра класса
-  def initialize(train_name, train_type, train_number = '')
-    @name = train_name.instance_of?(String) ? train_name : nil
-    @type = %w[cargo passenger].include?(train_type) ? train_type : nil
+  def initialize(train_name, train_number)
+    @name = train_name
+    @number = train_number
     @wagons = []
     @speed = 0
     @route = nil
     @current_station = nil
-    @number = train_number if train_number != ''
 
     @@instances << self
+    validate!
   end
 
-  # Добавить к поезду атрибут Номер (произвольная строка), если его еще нет, который указыватеся при его создании
-  def add_train_number_unless_exist
-    unless instance_variables.include?(:@number)
-      puts 'Enter train number'
-      @number = gets.chomp
-    end
+  def valid?
+    validate!
+  rescue
+    false
   end
 
   # В классе Train создать метод класса find, который принимает номер поезда (указанный при его создании) и возвращает
@@ -101,6 +84,11 @@ class Train
   end
 
   private
+
+  def validate!
+    Validation.validate_name!(@name)
+    raise 'Train number must be like "1s2-cd"' unless @number =~ /^[\da-zA-Z]{3}-*[\da-zA-Z]{2}$/
+  end
 
   def can_be_moved_to_this_station(station)
     !@route.nil? && station.instance_of?(Station) && @route.all_stations.include?(station) &&

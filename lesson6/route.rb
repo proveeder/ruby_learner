@@ -8,6 +8,8 @@ class Route
     @start_station = start_station.instance_of?(Station) ? start_station : nil
     @end_station = end_station.instance_of?(Station) ? end_station : nil
     @intermediate_stations = []
+
+    validate!
   end
 
   # Может добавлять промежуточную станцию в список
@@ -27,5 +29,18 @@ class Route
   # Может выводить список всех станций по-порядку от начальной до конечной
   def show_all_stations
     puts all_stations
+  end
+
+  def valid?
+    validate!
+  rescue
+    false
+  end
+
+  private
+
+  def validate!
+    raise 'Start station must be instance of Station class' unless @start_station.instance_of?(Station)
+    raise 'End station must be instance of Station class' unless @end_station.instance_of?(Station)
   end
 end

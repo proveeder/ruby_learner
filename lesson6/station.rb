@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
+require_relative 'validation'
+
 # Класс Station (Станция):
 class Station
   # Может показывать список всех поездов на станции, находящиеся в текущий момент
   attr_reader :name, :trains_on_station
+
+  include Validation
 
   @@all_stations = []
 
@@ -12,6 +16,8 @@ class Station
     @name = station_name.instance_of?(String) ? station_name : nil
     @trains_on_station = []
     @@all_stations << self
+
+    Validation.validate_name!(@name)
   end
 
   # Может принимать поезда (по одному за раз)
@@ -36,5 +42,11 @@ class Station
   # созданные на данный момент
   def self.all
     @@all_stations.each { |station| puts station.name }
+  end
+
+  def valid?
+    Validation.validate_name!(@name)
+  rescue
+    false
   end
 end
