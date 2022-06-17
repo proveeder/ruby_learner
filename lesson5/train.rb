@@ -1,21 +1,5 @@
 # frozen_string_literal: true
 
-# module My
-#
-#   def self.included(base)
-#     base.extend(ClassMethods)
-#   end
-#
-#   module ClassMethods
-#     def add_train_number_unless_exist
-#       unless self.instance_variables.include?(:@number)
-#         puts 'Enter train number'
-#         @number = gets.chomp
-#       end
-#     end
-#   end
-# end
-
 require_relative 'manufacturer'
 
 # Класс Train (Поезд):
