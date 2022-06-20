@@ -9,15 +9,15 @@ class Train
   # Подключить модуль к классам Вагон и Поезд
   include Manufacturer
 
-  @@instances = []
-
   # Может показывать текущую скорость
   # Может показывать количество вагонов
-  attr_reader :speed, :wagons, :type, :name
+  attr_reader :speed, :wagons, :type, :name, :number
 
   # Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов, эти данные указываются при
   # создании экземпляра класса
   def initialize(train_name, train_number)
+    validate_number!(train_number)
+
     @name = train_name
     @number = train_number
     @wagons = []
@@ -25,20 +25,23 @@ class Train
     @route = nil
     @current_station = nil
 
-    @@instances << self
     validate!
+  end
+
+  def go_through_each_wagon(block)
+    block.call(@wagons)
   end
 
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 
   # В классе Train создать метод класса find, который принимает номер поезда (указанный при его создании) и возвращает
   # объект поезда по номеру или nil, если поезд с таким номером не найден.
-  def self.find(train_name)
-    @@instances.select { |i| i.name == train_name }[0]
+  def self.find(train_number)
+    ObjectSpace.each_object(self).to_a.find { |train| train.number == train_number }
   end
 
   # Может тормозить (сбрасывать скорость до нуля)
@@ -88,6 +91,10 @@ class Train
   def validate!
     Validation.validate_name!(@name)
     raise 'Train number must be like "1s2-cd"' unless @number =~ /^[\da-zA-Z]{3}-*[\da-zA-Z]{2}$/
+  end
+
+  def validate_number!(number)
+    raise 'Train number must be unique' if self.class.find(number)
   end
 
   def can_be_moved_to_this_station(station)

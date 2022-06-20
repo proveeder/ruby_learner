@@ -9,15 +9,16 @@ class Station
 
   include Validation
 
-  @@all_stations = []
-
   def initialize(station_name)
     # Имеет название, которое указывается при ее создании
     @name = station_name.instance_of?(String) ? station_name : nil
     @trains_on_station = []
-    @@all_stations << self
 
     Validation.validate_name!(@name)
+  end
+
+  def go_through_each_train(block)
+    block.call(@trains_on_station)
   end
 
   # Может принимать поезда (по одному за раз)
@@ -41,12 +42,12 @@ class Station
   # В классе Station (жд станция) создать метод класса all, который возвращает все станции (объекты),
   # созданные на данный момент
   def self.all
-    @@all_stations.each { |station| puts station.name }
+    ObjectSpace.each_object(self).to_a.each { |station| puts station.name }
   end
 
   def valid?
     Validation.validate_name!(@name)
-  rescue
+  rescue StandardError
     false
   end
 end
