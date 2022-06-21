@@ -17,8 +17,10 @@ class Station
     Validation.validate_name!(@name)
   end
 
-  def go_through_each_train(block)
-    block.call(@trains_on_station)
+  def self.do_for_each_train(&block)
+    ObjectSpace.each_object(Station).to_a.each do |station|
+      station.trains_on_station.each(&block)
+    end
   end
 
   # Может принимать поезда (по одному за раз)
@@ -29,14 +31,6 @@ class Station
   # Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции).
   def send_train(train)
     trains_on_station.delete(train) if train.class <= Train
-  end
-
-  # Может показывать список поездов на станции по типу (см. ниже): кол-во грузовых, пассажирских
-  def trains_on_station_by_type(train_type)
-    trains_on_station_by_type = @trains_on_station.select { |train| train.type == train_type }
-
-    puts "Trains of type #{train_type} on station: #{trains_on_station_by_type}.
-          Amount: #{trains_on_station_by_type.length}"
   end
 
   # В классе Station (жд станция) создать метод класса all, который возвращает все станции (объекты),

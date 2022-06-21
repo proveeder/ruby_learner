@@ -193,30 +193,17 @@ class Main
   end
 
   def show_trains_formatted
-    show_train_formatted = lambda { |trains|
-      trains.each do |train|
-        puts("#{train.name}, #{train.class}, #{train.wagons.length}")
-      end
-    }
-    stations = ObjectSpace.each_object(Station).to_a
-    stations.each { |s| s.go_through_each_train show_train_formatted }
+    Station.do_for_each_train { |train| puts("#{train.name}, #{train.class}, #{train.wagons.length}") }
   end
 
   def show_wagons_formatted
-    show_formatted_wagon = lambda { |wagons|
-      wagons.each do |wagon|
+    Station.do_for_each_train { |train|
+      train.wagons.each do |wagon|
         puts("#{wagon.name}, #{wagon.class}")
         puts("#{wagon.taken_places}, #{wagon.places_available}") if wagon.instance_of?(PassengerWagon)
         puts("#{wagon.volume_available}, #{wagon.taken_volume}") if wagon.instance_of?(CargoWagon)
       end
     }
-
-    stations = ObjectSpace.each_object(Station).to_a
-    stations.each do |station|
-      station.trains_on_station.each do |train|
-        train.go_through_each_wagon show_formatted_wagon
-      end
-    end
   end
 end
 
