@@ -34,4 +34,5 @@ class Station
 end
 
 st = Station.new('St')
+
 p st.valid?
