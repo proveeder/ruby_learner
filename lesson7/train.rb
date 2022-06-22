@@ -89,7 +89,7 @@ class Train
   private
 
   def validate!
-    Validation.validate_name!(@name)
+    Validator.validate_name!(@name)
     raise 'Train number must be like "1s2-cd"' unless @number =~ /^[\da-zA-Z]{3}-*[\da-zA-Z]{2}$/
   end
 

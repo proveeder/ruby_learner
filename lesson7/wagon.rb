@@ -5,7 +5,7 @@ require_relative 'validation'
 
 class Wagon
   # Подключить модуль к классам Вагон и Поезд
-  include Validation
+  include Validator
   include Manufacturer
 
   attr_reader :name
@@ -25,6 +25,6 @@ class Wagon
   private
 
   def validate!
-    Validation.validate_name!(@name)
+    Validator.validate_name!(@name)
   end
 end
