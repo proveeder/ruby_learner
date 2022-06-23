@@ -1,13 +1,6 @@
 module Acessors
   def self.included(base)
     base.extend ClassMethods
-    base.send :include, InstanceMethods
-  end
-
-  module InstanceMethods
-    def vars_vals
-      @vars_vals ||= []
-    end
   end
 
   module ClassMethods
@@ -17,8 +10,10 @@ module Acessors
         define_method(name) { instance_variable_get(var_name) }
         define_method("#{name}=".to_sym) do |value|
           instance_variable_set(var_name, value)
-          @vars_vals << { var_name => value }
-          p "Value changed for #{var_name} on #{value}"
+          v = instance_variable_get("@vars_vals".to_sym) || []
+          instance_variable_set("@vars_vals".to_sym, v.push({ var_name => value }))
+          # @vars_vals << { var_name => value }
+          # p "Value changed for #{var_name} on #{value}"
         end
         define_method("#{name}_history".to_sym) { @vars_vals.map { |x| x[var_name] } }
       end
@@ -45,19 +40,22 @@ end
 class A
   include Acessors
 
-  my_attr_accessor_with_history :a
+  my_attr_accessor_with_history :a, :c
   strong_attr_accessor :b
-
-  def initialize
-    vars_vals
-  end
 end
 
 a = A.new
-p a.a
+# b = A.new
+
+# p a.a
 a.a = 1
 a.a = 2
-p a.a_history
+p a.instance_variables
+
+# p b.a
+# b.a = 3
+# b.a = 4
+# p b.a_history
 
 # a.b = [1, Integer]
 # p a.b

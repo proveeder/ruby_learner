@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 require_relative 'validator'
@@ -10,6 +9,9 @@ class Station
 
   include Validator
   # extend Validator
+
+  validate :name, :presence
+  validate :name, :format, /./
 
   def initialize(station_name)
     # Имеет название, которое указывается при ее создании
