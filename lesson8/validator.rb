@@ -16,20 +16,19 @@ module Validator
       when :presence
         define_method(method_name) do
           value = instance_variable_get("@#{name}")
-          p value
-          value.nil? || value == '' ? false : true
+          value.nil? || value == '' ? "@#{name} can't be empty string or nil" : true
         end
       when :format
         define_method(method_name) do
           value = instance_variable_get("@#{name}")
           regex = params[:pattern]
-          value =~ regex ? true : false
+          value =~ regex ? true : "@#{name} does not match pattern #{regex}"
         end
       when :type
         define_method(method_name) do
           value = instance_variable_get("@#{name}")
           type = params[:class]
-          value.instance_of?(type)
+          value.instance_of?(type) ? true : "@#{name} does not match type #{type}"
         end
       else
         puts 'Error on validation type'
@@ -40,17 +39,16 @@ module Validator
   module InstanceMethods
     def validate!
       self.class.validations.each do |method|
-        p method
-        raise RuntimeError if (send method) == false
+        res = send method
+        raise res if res != true
       end
     end
 
     def valid?
-      validation_methods = methods.filter { |method| method =~ /^[a-z]*_[a-z]*_validate$/ }
-      res = true
-      validation_methods.each do |method|
+      res = nil
+      self.class.validations.each do |method|
         res = send method
-        break if res == false
+        break if res != true
       end
       res
     end

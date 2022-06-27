@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'validator'
 
 # Класс Station (Станция):
@@ -7,11 +9,11 @@ class Station
   include Validator
 
   validate :name, :presence
-  validate :name, :format, pattern: /1/
+  validate :name, :type, class: Integer
 
   attr_accessor :name
 end
 
-st = Station.new()
+st = Station.new
 st.name = '1'
 p st.validate!
