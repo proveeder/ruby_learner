@@ -4,6 +4,22 @@ module InstanceCounter
     base.send :include, InstanceMethods
   end
 
+  # attr_accessor :validations
+
+  # def validate(name, validation_type, **params)
+  #   method_name = "#{name}_#{validation_type}_validate"
+  #   self.validations ||= []
+  #   self.validations.push(method_name)
+  #
+  #   case validation_type
+  #   when :presence
+  #     define_method(method_name) do
+  #       value = instance_variable_get("@#{name}")
+  #       value.nil? || value == '' ? "@#{name} can't be empty string or nil" : true
+  #     end
+  #   end
+  # end
+  #
   module ClassMethods
     def instances
       p instance_variable_get('@amount_instances') || 0
