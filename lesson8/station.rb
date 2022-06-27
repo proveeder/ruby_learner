@@ -14,4 +14,4 @@ end
 
 st = Station.new()
 st.name = '1'
-p st.valid?
+p st.validate!
